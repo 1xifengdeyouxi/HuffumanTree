@@ -1,0 +1,3 @@
+D:/c  program/Huffmantext/cmake-build-debug/CMakeFiles/Huffmantext.dir
+D:/c  program/Huffmantext/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/c  program/Huffmantext/cmake-build-debug/CMakeFiles/rebuild_cache.dir
