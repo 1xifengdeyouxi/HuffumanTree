@@ -31,33 +31,33 @@ struct HuffmanCode {
 struct MinHeapNode *root = NULL;
 
 // 创建新的哈夫曼树节点
-struct MinHeapNode* newNode(char data, unsigned freq) {
-    struct MinHeapNode* temp = (struct MinHeapNode*)malloc(sizeof(struct MinHeapNode));
+struct MinHeapNode *newNode(char data, unsigned freq) {
+    struct MinHeapNode *temp = (struct MinHeapNode *) malloc(sizeof(struct MinHeapNode));
     temp->left = temp->right = NULL;
     temp->data = data;
     temp->freq = freq;
-    temp->is_leaf = (data!= '$');
+    temp->is_leaf = (data != '$');
     return temp;
 }
 
 // 创建最小堆
-struct MinHeap* createMinHeap(unsigned capacity) {
-    struct MinHeap* minHeap = (struct MinHeap*)malloc(sizeof(struct MinHeap));
+struct MinHeap *createMinHeap(unsigned capacity) {
+    struct MinHeap *minHeap = (struct MinHeap *) malloc(sizeof(struct MinHeap));
     minHeap->size = 0;
     minHeap->capacity = capacity;
-    minHeap->array = (struct MinHeapNode**)malloc(minHeap->capacity * sizeof(struct MinHeapNode*));
+    minHeap->array = (struct MinHeapNode **) malloc(minHeap->capacity * sizeof(struct MinHeapNode *));
     return minHeap;
 }
 
 // 交换两个最小堆节点
-void swapMinHeapNode(struct MinHeapNode** a, struct MinHeapNode** b) {
-    struct MinHeapNode* t = *a;
+void swapMinHeapNode(struct MinHeapNode **a, struct MinHeapNode **b) {
+    struct MinHeapNode *t = *a;
     *a = *b;
     *b = t;
 }
 
 // 维护最小堆的性质
-void minHeapify(struct MinHeap* minHeap, int idx) {
+void minHeapify(struct MinHeap *minHeap, int idx) {
     int smallest = idx;
     int left = 2 * idx + 1;
     int right = 2 * idx + 2;
@@ -77,8 +77,8 @@ void minHeapify(struct MinHeap* minHeap, int idx) {
 }
 
 // 从最小堆中提取最小节点
-struct MinHeapNode* extractMin(struct MinHeap* minHeap) {
-    struct MinHeapNode* temp = minHeap->array[0];
+struct MinHeapNode *extractMin(struct MinHeap *minHeap) {
+    struct MinHeapNode *temp = minHeap->array[0];
     minHeap->array[0] = minHeap->array[minHeap->size - 1];
     --minHeap->size;
     minHeapify(minHeap, 0);
@@ -86,7 +86,7 @@ struct MinHeapNode* extractMin(struct MinHeap* minHeap) {
 }
 
 // 插入节点到最小堆
-void insertMinHeap(struct MinHeap* minHeap, struct MinHeapNode* minHeapNode) {
+void insertMinHeap(struct MinHeap *minHeap, struct MinHeapNode *minHeapNode) {
     ++minHeap->size;
     int i = minHeap->size - 1;
     while (i && minHeapNode->freq < minHeap->array[(i - 1) / 2]->freq) {
@@ -97,8 +97,8 @@ void insertMinHeap(struct MinHeap* minHeap, struct MinHeapNode* minHeapNode) {
 }
 
 // 构建最小堆
-struct MinHeap* buildMinHeap(char data[], int freq[], int size) {
-    struct MinHeap* minHeap = createMinHeap(size);
+struct MinHeap *buildMinHeap(char data[], int freq[], int size) {
+    struct MinHeap *minHeap = createMinHeap(size);
     for (int i = 0; i < size; ++i) {
         minHeap->array[i] = newNode(data[i], freq[i]);
     }
@@ -110,12 +110,12 @@ struct MinHeap* buildMinHeap(char data[], int freq[], int size) {
 }
 
 // 构建哈夫曼树
-struct MinHeapNode* buildHuffmanTree(char data[], int freq[], int size) {
-    struct MinHeap* minHeap = buildMinHeap(data, freq, size);
+struct MinHeapNode *buildHuffmanTree(char data[], int freq[], int size) {
+    struct MinHeap *minHeap = buildMinHeap(data, freq, size);
     while (minHeap->size > 1) {
-        struct MinHeapNode* left = extractMin(minHeap);
-        struct MinHeapNode* right = extractMin(minHeap);
-        struct MinHeapNode* top = newNode('$', left->freq + right->freq);
+        struct MinHeapNode *left = extractMin(minHeap);
+        struct MinHeapNode *right = extractMin(minHeap);
+        struct MinHeapNode *top = newNode('$', left->freq + right->freq);
         top->left = left;
         top->right = right;
         insertMinHeap(minHeap, top);
@@ -124,7 +124,8 @@ struct MinHeapNode* buildHuffmanTree(char data[], int freq[], int size) {
 }
 
 // 递归函数来生成哈夫曼编码
-void generateHuffmanCodes(struct MinHeapNode* root, char* code, int top, struct HuffmanCode huffmanCodes[], int* index) {
+void
+generateHuffmanCodes(struct MinHeapNode *root, char *code, int top, struct HuffmanCode huffmanCodes[], int *index) {
     if (root->left) {
         code[top] = '0';
         generateHuffmanCodes(root->left, code, top + 1, huffmanCodes, index);
@@ -187,14 +188,14 @@ void encodeFile(struct HuffmanCode huffmanCodes[], int size) {
 }
 
 // 解码哈夫曼编码并打印结果
-void decodeFile(struct MinHeapNode* root) {
+void decodeFile(struct MinHeapNode *root) {
     FILE *inputFile = fopen("CodeFile.txt", "r");
     FILE *outputFile = fopen("TextFile.txt", "w");
-    struct MinHeapNode* current = root;
+    struct MinHeapNode *current = root;
     char ch;
 
     // 检查文件是否成功打开
-    if (inputFile == NULL|| outputFile == NULL) {
+    if (inputFile == NULL || outputFile == NULL) {
         printf("无法打开文件 TextFile.txt或CodeFile.txt\n");
         return;
     }
@@ -242,7 +243,7 @@ void printCodeFile() {
 }
 
 // 打印哈夫曼树（文本方式）
-void printHuffmanTree(struct MinHeapNode* root, int depth) {
+void printHuffmanTree(struct MinHeapNode *root, int depth) {
     if (!root) return;
     printHuffmanTree(root->right, depth + 1);
     for (int i = 0; i < depth; ++i) printf("\t");
@@ -250,12 +251,12 @@ void printHuffmanTree(struct MinHeapNode* root, int depth) {
     if (dataToPrint == ' ') {
         dataToPrint = '_';
     }
-    printf("%c\n", dataToPrint == '$'? '*' : dataToPrint);
+    printf("%c\n", dataToPrint == '$' ? '*' : dataToPrint);
     printHuffmanTree(root->left, depth + 1);
 }
 
 // 存储哈夫曼树到文件
-void saveHuffmanTree(struct MinHeapNode* root, FILE *file) {
+void saveHuffmanTree(struct MinHeapNode *root, FILE *file) {
     if (!root) return;
     char dataToSave = root->data;
     if (dataToSave == ' ') {
@@ -267,7 +268,7 @@ void saveHuffmanTree(struct MinHeapNode* root, FILE *file) {
 }
 
 // 读取哈夫曼树从文件
-struct MinHeapNode* loadHuffmanTree(FILE *file) {
+struct MinHeapNode *loadHuffmanTree(FILE *file) {
     char data;
     unsigned freq;
     int is_leaf;
@@ -276,7 +277,7 @@ struct MinHeapNode* loadHuffmanTree(FILE *file) {
     if (data == '_') {
         data = ' ';
     }
-    struct MinHeapNode* node = newNode(data, freq);
+    struct MinHeapNode *node = newNode(data, freq);
     node->is_leaf = is_leaf;
     if (is_leaf) {
         node->left = node->right = NULL;
@@ -293,6 +294,7 @@ void menu() {
     do {
         printf("\n菜单：\n");
         printf("I：初始化（Initialization）\n");
+        printf("A：创建ToBeTran.txt 文件\n");
         printf("E：编码（Encoding）\n");
         printf("D：译码（Decoding）\n");
         printf("P：打印代码文件（Print）\n");
@@ -301,7 +303,26 @@ void menu() {
         printf("请输入选择: ");
         scanf(" %c", &choice);
 
+
         switch (choice) {
+            case 'A': {
+                FILE *file = fopen("ToBeTran.txt", "w"); // "W" 模式会创建文件（若不存在），并覆盖原来的内容
+                if (file == NULL) {
+                    printf("无法创建或打开文件 ToBeTran.txt\n");
+                    break;
+                }
+                printf("请输入要写入 ToBeTran.txt 文件的内容（按回车结束）：\n");
+                int c;
+                while ((c = getchar())!= '\n' && c!= EOF);
+                char input[1000]; // 输入内容不会超过 1000 个字符
+                fgets(input, sizeof(input), stdin); // 读取一行用户输入
+                fputs(input, file); // 将用户输入写入文件
+                printf("内容已写入 ToBeTran.txt 文件。\n");
+
+                fclose(file);
+                break;
+            }
+
             case 'I': {
                 int n;
                 printf("输入字符集大小: ");
@@ -311,10 +332,10 @@ void menu() {
                 for (int i = 0; i < n; i++) {
                     printf("输入字符和对应频率: ");
                     // 先读取字符（包括空格）
-                    data[i]=getchar();
+                    data[i] = getchar();
                     // 处理可能的换行符（如果有）
                     if (data[i] == '\n') {
-                        data[i]=getchar();
+                        data[i] = getchar();
                     }
                     scanf("%d", &freq[i]);
                     // 添加调试输出
